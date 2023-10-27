@@ -37,4 +37,3 @@ nb-configuration.xml
 
 # Plugin directory
 /.quarkus/cli/plugins/
-!/.env
