@@ -1,0 +1,78 @@
+{#include layout}
+    {#title}Terminale{/title}
+    {#body}
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+
+            table {
+                width: 80%;
+                margin: 0 auto;
+                border-collapse: collapse;
+            }
+
+            th, td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: center;
+            }
+
+            th {
+                background-color: #333;
+                color: #fff;
+            }
+        </style>
+
+        <div hx-ext="sse" sse-connect="/refreshTerminals">
+        <h1>
+            Student Rep Elections
+            <style>
+                me {
+                    text-align: center;
+                    font-size: 3em;
+                }
+            </style>
+        </h1>
+
+        <div hx-get="/tablePartial" hx-trigger="sse:unlock, sse:vote">
+        {#fragment id = table}
+            <table>
+            <thead>
+            <tr>
+                <td>N°</td>
+                <td>Name</td>
+                <td>List Master</td>
+                <td>Members</td>
+                <td></td>
+            </tr>
+            </thead>
+
+            <tbody>
+            {#for item in items}
+                <tr>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{item.listMaster}</td>
+                <td>
+                    {#for member in item.members}
+                        {member} <br/>
+                    {/for}
+                </td>
+
+                <td>
+                <button
+                hx-post="/sendVote?id={item.id}" hx-confirm="Are you sure you want to vote {item.name}?"
+                hx-swap="none"  hx-ext='json-enc'>
+                    Place your vote
+                </button>
+                </td>
+                </tr>
+            {/for}
+            </tbody>
+            </table>
+        {/fragment}
+        </div>
+        </div>
+    {/body}
+{/include}
